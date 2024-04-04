@@ -1,0 +1,23 @@
+name: CI
+on: [ push, pull_request ]
+env:
+  OMNILINTER_VERSION: 0.6.0
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    name: Check ruleset
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache omnilinter
+        id: cache-omnilinter
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/bin/omnilinter
+          key: omnilinter-${{ env.OMNILINTER_VERSION }}-${{ runner.os }}
+      - name: Build omnilinter
+        if: steps.cache-omnilinter.outputs.cache-hit != 'true'
+        run: cargo install omnilinter --version $OMNILINTER_VERSION
+      - name: Check projects.conf
+        run: omnilinter -c projects.conf
+      - name: Check freebsd-ports.conf
+        run: omnilinter -c freebsd-ports.conf
