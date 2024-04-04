@@ -1,7 +1,7 @@
 name: CI
 on: [ push, pull_request ]
 env:
-  OMNILINTER_VERSION: 0.6.0
+  OMNILINTER_VERSION: 0.7.0
 jobs:
   check:
     runs-on: ubuntu-latest
